@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realistic Space Background - Testimonials</title>
+    <style>
+         * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: black;
+    color: white;
+    position: relative;
+}
+
+/* Space Background */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://source.unsplash.com/1600x900/?galaxy,space,nebula') no-repeat center center/cover;
+    opacity: 0.4;
+    z-index: -2;
+}
+
+/* Star Canvas */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
+/* Responsive Testimonial Container */
+.testimonial-container {
+    width: 90%;
+    max-width: 1000px;
+    background: rgba(40, 40, 40, 0.6);
+    padding: 20px;
+    border-radius: 15px;
+    transition: box-shadow 0.3s, transform 0.3s;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    position: relative;
+    flex-direction: column;
+}
+
+.testimonial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease-out forwards;
+    width: 100%;
+    margin: 20px;
+}
+
+.testimonial img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid cyan;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.testimonial p {
+    font-size: 16px;
+    color: #e0e0e0;
+    margin-bottom: 8px;
+    font-style: italic;
+}
+
+.testimonial h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: cyan;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Arrows */
+.arrows {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transform: translateY(-50%);
+    opacity: 1;
+    padding: 0 10px;
+}
+
+.arrows span {
+    font-size: 24px;
+    color: white;
+    background: rgba(0, 255, 255, 0.5);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-shadow: 0 0 8px cyan;
+    border-radius: 8px;
+    border: 1px solid cyan;
+}
+
+/* Adjustments for Mobile */
+@media screen and (max-width: 768px) {
+    body {
+        height: auto;
+        padding: 20px;
+    }
+
+    .testimonial-container {
+        padding: 15px;
+        width: 95%;
+    }
+
+    .testimonial img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .testimonial p {
+        font-size: 14px;
+    }
+
+    .arrows span {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+
+    <canvas id="starCanvas"></canvas>
+
+    <div class="testimonial-container">
+        <div class="testimonial">
+        </div>
+        <div class="arrows">
+            <span id="prevArrow">&#8592;</span>
+            <span id="nextArrow">&#8594;</span>
+        </div>
+        
+    </div>
+
+<script>
+const testimonials = [
+    {
+        quote: "Absolutely love this product! It has made my life so much easier.",
+        name: "Sarah Chen",
+        img: "https://randomuser.me/api/portraits/women/44.jpg"
+    },
+    {
+        quote: "This platform has significantly improved our workflow.",
+        name: "Michael Rodriguez",
+        img: "https://randomuser.me/api/portraits/men/47.jpg"
+    },
+    {
+        quote: "Outstanding support and robust features! It’s a game-changer.",
+        name: "Lisa Thompson",
+        img: "https://randomuser.me/api/portraits/women/29.jpg"
+    },
+    {
+        quote: "The UI is so intuitive and well-designed. Highly recommended!",
+        name: "James Kim",
+        img: "https://randomuser.me/api/portraits/men/33.jpg"
+    }
+];
+
+let index = 0;
+
+function updateTestimonial() {
+    const testimonialDiv = document.querySelector('.testimonial');
+
+    if (!testimonialDiv) {
+        console.error("❌ Testimonial container not found!");
+        return;
+    }
+
+    testimonialDiv.style.opacity = "0"; // Fade out before change
+
+    setTimeout(() => {
+        testimonialDiv.innerHTML = `
+            <img src="${testimonials[index].img}" alt="${testimonials[index].name}">
+            <p>"${testimonials[index].quote}"</p>
+            <h3>${testimonials[index].name}</h3>
+        `;
+        testimonialDiv.style.opacity = "1"; // Fade in after change
+    }, 200); // Faster transition
+}
+
+function nextTestimonial() {
+    index = (index + 1) % testimonials.length;
+    updateTestimonial();
+}
+
+function prevTestimonial() {
+    index = (index - 1 + testimonials.length) % testimonials.length;
+    updateTestimonial();
+}
+
+// Attach event listeners only when DOM is fully loaded
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("prevArrow").addEventListener("click", prevTestimonial);
+    document.getElementById("nextArrow").addEventListener("click", nextTestimonial);
+    
+    updateTestimonial();  // Load first testimonial
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const canvas = document.getElementById('starCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let stars = [];
+    let moveX = 0, moveY = 0;
+    let useGyro = false;
+
+    // 🛠️ Debug UI
+    const debugDiv = document.createElement("div");
+    debugDiv.innerHTML = `
+        <label>
+            <input type="checkbox" id="enableGyro"> Enable Gyro
+        </label>
+        <p><strong>Status:</strong> <span id="gyroStatus">Not Enabled</span></p>
+        <p><strong>Gyro Values:</strong> <span id="gyroData">Waiting...</span></p>
+        <p><strong>Errors:</strong> <span id="gyroError">None</span></p>
+    `;
+    debugDiv.style.position = "absolute";
+    debugDiv.style.top = "10px";
+    debugDiv.style.left = "10px";
+    debugDiv.style.background = "rgba(0, 0, 0, 0.8)";
+    debugDiv.style.color = "white";
+    debugDiv.style.padding = "10px";
+    debugDiv.style.fontSize = "14px";
+    debugDiv.style.borderRadius = "5px";
+    document.body.appendChild(debugDiv);
+
+    function updateGyroDisplay(gamma, beta, alpha) {
+        document.getElementById("gyroData").innerText = 
+            `Gamma: ${gamma.toFixed(2)}, Beta: ${beta.toFixed(2)}, Alpha: ${alpha.toFixed(2)}`;
+    }
+
+    function showError(message) {
+        console.error("❌ Error:", message);
+        document.getElementById("gyroError").innerText = message;
+    }
+
+    function showStatus(message) {
+        console.log("ℹ️ Status:", message);
+        document.getElementById("gyroStatus").innerText = message;
+    }
+
+    function handleGyro(event) {
+        if (!useGyro) return;
+
+        if (event.gamma !== null && event.beta !== null) {
+            console.log("📱 Gyro Data:", event.gamma, event.beta, event.alpha);
+            moveX = event.gamma * 0.5;
+            moveY = event.beta * 0.5;
+
+            updateGyroDisplay(event.gamma, event.beta, event.alpha);
+            showStatus("Gyroscope Active ✅");
+        } else {
+            showError("⚠️ No gyro data received!");
+        }
+    }
+
+    function enableGyro() {
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        showStatus("Gyroscope Permission Granted ✅");
+                        useGyro = true;
+                        window.addEventListener("deviceorientation", handleGyro);
+                    } else {
+                        showError("Permission Denied! Enable in browser settings.");
+                    }
+                })
+                .catch(error => showError("Permission Error: " + error));
+        } else {
+            showStatus("No Permission Request Needed (Non-iOS Device)");
+            useGyro = true;
+            window.addEventListener("deviceorientation", handleGyro);
+        }
+    }
+
+    document.getElementById("enableGyro").addEventListener("change", function () {
+        useGyro = this.checked;
+        if (useGyro) {
+            enableGyro();
+            showStatus("Enabling Gyroscope...");
+        } else {
+            showStatus("Gyroscope Disabled ❌");
+            moveX = moveY = 0;
+        }
+    });
+
+    function createStars() {
+        stars = [];
+        for (let i = 0; i < 300; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5 + 0.5,
+                speed: Math.random() * 0.1 + 0.03,
+            });
+        }
+    }
+
+    function handleMouseMove(event) {
+        if (!useGyro) {
+            moveX = (event.clientX / window.innerWidth - 0.5) * 3;
+            moveY = (event.clientY / window.innerHeight - 0.5) * 3;
+        }
+    }
+
+    function animateStars() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        stars.forEach(star => {
+            star.x += moveX * 0.4;
+            star.y += moveY * 0.4;
+
+            if (star.x < 0) star.x = canvas.width;
+            if (star.x > canvas.width) star.x = 0;
+            if (star.y < 0) star.y = canvas.height;
+            if (star.y > canvas.height) star.y = 0;
+
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "white";
+            ctx.globalAlpha = Math.random() * 0.8 + 0.2;
+            ctx.fill();
+        });
+
+        requestAnimationFrame(animateStars);
+    }
+
+    createStars();
+    animateStars();
+
+    if (!/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+        window.addEventListener("mousemove", handleMouseMove);
+    }
+});
+
+
+// window.onload = function () {
+//     updateTestimonial();
+// };
+
+</script>
+
+</body>
+</html>
