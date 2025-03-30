@@ -247,7 +247,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const menuIcon = document.querySelector(".menu-icon");
     const nav = document.querySelector("nav");
 
+    // Toggle menu
     menuIcon.addEventListener("click", function () {
-        nav.classList.toggle("show-nav");
+        nav.classList.add("show-nav");
+        menuIcon.classList.add("hide");
+    });
+
+    // Hide menu when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!nav.contains(event.target) && !menuIcon.contains(event.target)) {
+            nav.classList.remove("show-nav");
+            menuIcon.classList.remove("hide");
+        }
     });
 });
