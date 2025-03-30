@@ -294,19 +294,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function handleGyro(event) {
-        if (!useGyro) return;
+    if (!useGyro) return;
 
-        if (event.gamma !== null && event.beta !== null) {
-            console.log("📱 Gyro Data:", event.gamma, event.beta, event.alpha);
-            moveX = event.gamma * 0.05;
-            moveY = event.beta * 0.05;
+    if (event.gamma !== null && event.beta !== null) {
+        console.log("📱 Gyro Data:", event.gamma, event.beta, event.alpha);
 
-            updateGyroDisplay(event.gamma, event.beta, event.alpha);
-            showStatus("Gyroscope Active ✅");
-        } else {
-            showError("⚠️ No gyro data received!");
-        }
+        let smoothFactor = 0.05; // Controls how smoothly it transitions
+        moveX += (event.gamma * 0.1 - moveX) * smoothFactor;
+        moveY += (event.beta * 0.1 - moveY) * smoothFactor; // Reduced vertical sensitivity
+
+        updateGyroDisplay(event.gamma, event.beta, event.alpha);
+        showStatus("Gyroscope Active ✅");
+    } else {
+        showError("⚠️ No gyro data received!");
     }
+}
+
 
     function enableGyro() {
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
