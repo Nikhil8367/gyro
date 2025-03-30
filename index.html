@@ -257,90 +257,33 @@ document.addEventListener("DOMContentLoaded", () => {
     let stars = [];
     let moveX = 0, moveY = 0;
     let useGyro = false;
-
-    // 🛠️ Debug UI
-    const debugDiv = document.createElement("div");
-    debugDiv.innerHTML = `
-        <label>
-            <input type="checkbox" id="enableGyro"> Enable Gyro
-        </label>
-        <p><strong>Status:</strong> <span id="gyroStatus">Not Enabled</span></p>
-        <p><strong>Gyro Values:</strong> <span id="gyroData">Waiting...</span></p>
-        <p><strong>Errors:</strong> <span id="gyroError">None</span></p>
-    `;
-    debugDiv.style.position = "absolute";
-    debugDiv.style.top = "10px";
-    debugDiv.style.left = "10px";
-    debugDiv.style.background = "rgba(0, 0, 0, 0.8)";
-    debugDiv.style.color = "white";
-    debugDiv.style.padding = "10px";
-    debugDiv.style.fontSize = "14px";
-    debugDiv.style.borderRadius = "5px";
-    document.body.appendChild(debugDiv);
-
-    function updateGyroDisplay(gamma, beta, alpha) {
-        document.getElementById("gyroData").innerText = 
-            `Gamma: ${gamma.toFixed(2)}, Beta: ${beta.toFixed(2)}, Alpha: ${alpha.toFixed(2)}`;
-    }
-
-    function showError(message) {
-        console.error("❌ Error:", message);
-        document.getElementById("gyroError").innerText = message;
-    }
-
-    function showStatus(message) {
-        console.log("ℹ️ Status:", message);
-        document.getElementById("gyroStatus").innerText = message;
-    }
-
-    function handleGyro(event) {
-    if (!useGyro) return;
-
-    if (event.gamma !== null && event.beta !== null) {
-        console.log("📱 Gyro Data:", event.gamma, event.beta, event.alpha);
-
-        let smoothFactor = 0.05; // Controls how smoothly it transitions
-        moveX += (event.gamma * 0.1 - moveX) * smoothFactor;
-        moveY += (event.beta * 0.1 - moveY) * smoothFactor; // Reduced vertical sensitivity
-
-        updateGyroDisplay(event.gamma, event.beta, event.alpha);
-        showStatus("Gyroscope Active ✅");
-    } else {
-        showError("⚠️ No gyro data received!");
-    }
-}
-
+    let isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
     function enableGyro() {
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
             DeviceOrientationEvent.requestPermission()
                 .then(permissionState => {
                     if (permissionState === 'granted') {
-                        showStatus("Gyroscope Permission Granted ✅");
                         useGyro = true;
                         window.addEventListener("deviceorientation", handleGyro);
-                    } else {
-                        showError("Permission Denied! Enable in browser settings.");
                     }
                 })
-                .catch(error => showError("Permission Error: " + error));
+                .catch(console.error);
         } else {
-            showStatus("No Permission Request Needed (Non-iOS Device)");
             useGyro = true;
             window.addEventListener("deviceorientation", handleGyro);
         }
     }
 
-    document.getElementById("enableGyro").addEventListener("change", function () {
-        useGyro = this.checked;
-        if (useGyro) {
-            enableGyro();
-            showStatus("Enabling Gyroscope...");
-        } else {
-            showStatus("Gyroscope Disabled ❌");
-            moveX = moveY = 0;
+    function handleGyro(event) {
+        if (!useGyro) return;
+
+        if (event.gamma !== null && event.beta !== null) {
+            let smoothFactor = 0.05;
+            moveX += (event.gamma * 0.2 - moveX) * smoothFactor;
+            moveY += (event.beta * 0.1 - moveY) * smoothFactor;
         }
-    });
+    }
 
     function createStars() {
         stars = [];
@@ -349,15 +292,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 radius: Math.random() * 1.5 + 0.5,
-                speed: Math.random() * 0.1 + 0.03,
+                speedX: Math.random() * 0.05 + 0.02,
+                speedY: Math.random() * 0.05 + 0.02,
             });
         }
     }
 
     function handleMouseMove(event) {
         if (!useGyro) {
-            moveX = (event.clientX / window.innerWidth - 0.5) * 3;
-            moveY = (event.clientY / window.innerHeight - 0.5) * 3;
+            let speedMultiplier = isMobile ? 1 : 3; // ⭐ Increase speed on laptops
+            moveX = (event.clientX / window.innerWidth - 0.5) * 3 * speedMultiplier;
+            moveY = (event.clientY / window.innerHeight - 0.5) * 3 * speedMultiplier;
         }
     }
 
@@ -365,9 +310,12 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         stars.forEach(star => {
-            star.x += moveX * 0.4;
-            star.y += moveY * 0.4;
+            // ⭐ Faster speed on laptop
+            let speedBoost = isMobile ? 1 : 1.5; 
+            star.x += moveX * star.speedX * speedBoost;
+            star.y += moveY * star.speedY * speedBoost;
 
+            // Wrap-around effect
             if (star.x < 0) star.x = canvas.width;
             if (star.x > canvas.width) star.x = 0;
             if (star.y < 0) star.y = canvas.height;
@@ -386,11 +334,12 @@ document.addEventListener("DOMContentLoaded", () => {
     createStars();
     animateStars();
 
-    if (!/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+    if (isMobile) {
+        enableGyro();
+    } else {
         window.addEventListener("mousemove", handleMouseMove);
     }
 });
-
 
 // window.onload = function () {
 //     updateTestimonial();
