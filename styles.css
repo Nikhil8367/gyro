@@ -1,0 +1,489 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+    background: black;
+    color: white;
+    position: relative;
+}
+
+/* Space Background */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://source.unsplash.com/1600x900/?galaxy,space,nebula') no-repeat center center/cover;
+    filter: blur(2px);
+    opacity: 0.5;
+    z-index: -2;
+}
+
+/* Floating Stars Effect */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
+/* Glassmorphism Navigation Bar */
+header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    padding: 15px 0;
+    text-align: center;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 255, 255, 0.3);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: cyan;
+    text-shadow: 0px 0px 10px cyan;
+}
+
+/* Navigation Links */
+nav ul {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    margin-top: 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: 0.3s;
+    padding: 5px 15px;
+    border-radius: 8px;
+}
+
+nav ul li a:hover {
+    color: black;
+    background: cyan;
+    box-shadow: 0px 0px 10px cyan;
+}
+
+/* Hero Section */
+#hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+#hero h1 {
+    font-size: 50px;
+    color: cyan;
+    text-shadow: 0px 0px 20px cyan;
+    animation: glowText 3s infinite alternate ease-in-out;
+}
+
+#hero p {
+    font-size: 20px;
+    max-width: 600px;
+    opacity: 0.9;
+}
+
+/* Sections */
+section {
+    padding: 100px 20px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    color: cyan;
+    text-shadow: 0px 0px 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Skills */
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.skills-list span {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 18px;
+    color: cyan;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.skills-list span:hover {
+    background: cyan;
+    color: black;
+    box-shadow: 0px 0px 15px cyan;
+    transform: translateY(-3px);
+}
+
+/* Project Cards - 3D Effect */
+.project-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+    perspective: 1200px; /* Stronger 3D depth effect */
+}
+
+.project-card {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+    border-radius: 10px;
+    width: 260px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transform-style: preserve-3d; /* Ensures child elements stay in 3D space */
+}
+
+.project-card:hover {
+    transform: rotateY(20deg) rotateX(10deg) skewX(5deg) scale(1.1);
+    box-shadow: 0px 15px 30px rgba(0, 255, 255, 0.8), 0px 0px 15px cyan;
+}
+
+
+.project-card h3 {
+    margin-top: 10px;
+    color: cyan;
+}
+
+/* Contact */
+.contact-btn {
+    display: inline-block;
+    background: linear-gradient(90deg, #ff5722, cyan);
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.3);
+}
+
+.contact-btn:hover {
+    background: cyan;
+    color: black;
+    transform: scale(1.1);
+}
+/* Default state: Hidden with downward offset */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* When in view, fade in */
+.fade-in.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* When scrolled away (Optional smoother effect) */
+.fade-in:not(.show) {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease-in, transform 0.4s ease-in;
+}
+
+
+/* TESTIMONIAL SECTION */
+.testimonial-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    margin: auto;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    position: relative;
+}
+
+#testimonial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-height: 200px;
+    width: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+#testimonial-text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+    max-width: 500px;
+    color: white;
+}
+
+#testimonial-name {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffcc00;
+}
+
+#testimonial-role {
+    font-size: 0.9rem;
+    color: #ddd;
+}
+
+#testimonial-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #ffcc00;
+}
+
+/* TESTIMONIAL NAVIGATION */
+.arrows {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.arrows span {
+    font-size: 2rem;
+    color: #ffcc00;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.arrows span:hover {
+    transform: scale(1.2);
+    color: white;
+}
+
+/* Reverse Testimonial Animations */
+.slide-out-left {
+    animation: slideOutLeft 0.3s ease-in-out forwards;
+}
+
+.slide-out-right {
+    animation: slideOutRight 0.3s ease-in-out forwards;
+}
+
+.slide-in-left {
+    animation: slideInFromLeft 0.3s ease-in-out forwards;
+}
+
+.slide-in-right {
+    animation: slideInFromRight 0.3s ease-in-out forwards;
+}
+/* Footer Styles */
+footer {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    color: white;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0px -5px 15px rgba(0, 255, 255, 0.3);
+}
+
+/* Footer Navigation */
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.footer-nav a {
+    color: cyan;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.footer-nav a:hover {
+    color: white;
+    text-shadow: 0px 0px 10px cyan;
+}
+
+/* Social Icons */
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.footer-social a {
+    font-size: 22px;
+    color: cyan;
+    transition: 0.3s;
+}
+
+.footer-social a:hover {
+    color: white;
+    text-shadow: 0px 0px 10px cyan;
+    transform: scale(1.2);
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Floating Glow Effect */
+footer::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 120px;
+    height: 5px;
+    background: cyan;
+    filter: blur(5px);
+    transform: translateX(-50%);
+    opacity: 0.7;
+}
+
+
+/* Exit Animations */
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+/* Entry Animations */
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+
+
+
+/* Animations */
+@keyframes glowText {
+    0% { text-shadow: 0px 0px 10px cyan; }
+    100% { text-shadow: 0px 0px 30px cyan; }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+    #hero h1 {
+        font-size: 36px;
+    }
+
+    #hero p {
+        font-size: 18px;
+    }
+
+    .skills-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .project-card {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #hero h1 {
+        font-size: 28px;
+    }
+
+    #hero p {
+        font-size: 16px;
+    }
+
+    header {
+        padding: 10px 0;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .contact-btn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}
