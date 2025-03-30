@@ -52,30 +52,53 @@ header {
     box-shadow: 0 2px 10px rgba(0, 255, 255, 0.3);
 }
 
+
+/* --------------- NAVIGATION STYLES --------------- */
+/* Fixed Sidebar Navigation */
+nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 250px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    box-shadow: 2px 0px 10px rgba(0, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+/* Logo */
 .logo {
     font-size: 24px;
     font-weight: bold;
     text-transform: uppercase;
     color: cyan;
     text-shadow: 0px 0px 10px cyan;
+    margin-bottom: 20px;
 }
 
 /* Navigation Links */
 nav ul {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
     list-style: none;
-    margin-top: 10px;
+    padding: 0;
+    width: 100%;
+}
+
+nav ul li {
+    width: 100%;
 }
 
 nav ul li a {
+    display: block;
     color: white;
     text-decoration: none;
     font-size: 18px;
+    padding: 15px;
+    text-align: center;
     transition: 0.3s;
-    padding: 5px 15px;
-    border-radius: 8px;
 }
 
 nav ul li a:hover {
@@ -84,6 +107,45 @@ nav ul li a:hover {
     box-shadow: 0px 0px 10px cyan;
 }
 
+/* ----------- MAIN CONTENT (Right Side) ----------- */
+.main-content {
+    margin-left: 250px; /* Moves content to the right, avoiding navbar overlap */
+    padding: 20px;
+    flex-grow: 1;
+}
+
+/* ----------- MOBILE NAVIGATION ----------- */
+.menu-icon {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 200;
+}
+
+/* Hide sidebar on mobile */
+@media screen and (max-width: 768px) {
+    nav {
+        transform: translateX(-100%);
+        width: 250px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    .show-nav {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0; /* Content takes full width when nav is hidden */
+    }
+}
 /* Hero Section */
 #hero {
     height: 100vh;
@@ -479,7 +541,7 @@ footer::before {
 
     nav ul {
         display: flex;
-        flex-direction: row;
+        flex-wrap: wrap;
         justify-content: center; /* Ensures items remain in a row */
         gap: 8px;
     }
