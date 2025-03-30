@@ -298,8 +298,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (event.gamma !== null && event.beta !== null) {
             console.log("📱 Gyro Data:", event.gamma, event.beta, event.alpha);
-            moveX = event.gamma * 0.5;
-            moveY = event.beta * 0.5;
+            moveX = event.gamma * 0.2;
+            moveY = event.beta * 0.2;
 
             updateGyroDisplay(event.gamma, event.beta, event.alpha);
             showStatus("Gyroscope Active ✅");
