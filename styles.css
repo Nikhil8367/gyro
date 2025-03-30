@@ -478,7 +478,9 @@ footer::before {
     }
 
     nav ul {
-        flex-direction: column;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Ensures items remain in a row */
         gap: 8px;
     }
 
