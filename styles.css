@@ -479,7 +479,7 @@ footer::before {
 
     nav ul {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: row;
         justify-content: center; /* Ensures items remain in a row */
         gap: 8px;
     }
