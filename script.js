@@ -243,3 +243,11 @@ document.querySelectorAll(".project-card").forEach((card) => {
         card.style.boxShadow = "0px 5px 15px rgba(0, 255, 255, 0.5)";
     });
 });
+document.addEventListener("DOMContentLoaded", function () {
+    const menuIcon = document.querySelector(".menu-icon");
+    const nav = document.querySelector("nav");
+
+    menuIcon.addEventListener("click", function () {
+        nav.classList.toggle("show-nav");
+    });
+});
